@@ -1,3 +1,13 @@
+/*	This file is part of GEngine.
+*
+*Decription:
+* Represents a namespace for errors.
+* Contains error structures and funtions for error-handling.
+*
+*Author: George Popov
+*Date:
+*Current Phase: Paused
+*/
 #ifndef ERRORS
 #define ERRORS
 

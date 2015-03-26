@@ -1,10 +1,21 @@
+/******************************************************
+*
+*	GEngine - 2D game engine.
+* GEngine is a beautiful and simply game engine
+* developed by George Popoff.
+*
+* George Popoff 2015.
+* GEngine all rights are reserved (c).
+*
+*
+* For more details about this product read README file.
+*******************************************************/
+
 #include <SDL.h>
 #include <cstdlib>
 #include "gPlayer.h"
 #include "gGame.h"
 
-//gGame engine - v 0.0001a
-//DEVELOPED by George Popov - 2014 (c)
 int main(int argc, char* argv[])
 {	
 	//CREATE MAIN GAME CLASS

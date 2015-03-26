@@ -1,12 +1,16 @@
+/*	This file is part of GEngine.
+*
+*Decription:
+*
+*Author: George Popov
+*Date:
+*Current Phase:
+*/
 #ifndef IDRAWBLE
 #define IDRAWBLE
 
 #include <SDL.h>
 #include "gGraphicManager.h"
-
-//Interface for all drawble objects
-//MAIN superclass
-//George Popov - 2014 (C)
 
 class IDrawble
 {
@@ -15,7 +19,6 @@ public:
 	virtual void remove() = 0;
 	
 	virtual bool load() = 0;
-//virtual ~IDrawble(void);
 
 protected:
 	long int id;

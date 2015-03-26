@@ -2,37 +2,36 @@
 
 gGraphicManager* gGraphicManager::device = NULL;
 
-//Creates graphicManager device. Need two arguments: size of the screen.
-//!Also creates a window
 gGraphicManager::gGraphicManager(const int width, const int height):screen_width(width), screen_height(height), is_full_screen(false)
 {
+	//INITIALIZING SDL
 	if(SDL_Init(SDL_INIT_EVERYTHING))
 	{
 		SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM, "Cant init SDL . . .");
 	}
 
+	//WINDOW creating
 	mainWnd = createGameWindow(screen_width, screen_height);
-
 	if(!mainWnd)
 		SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "Cant init main window . . .");
 
+	//RENDER creating
 	mainRend = createGameRenderer();
-
 	if(!mainRend)
 		SDL_LogError(SDL_LOG_CATEGORY_RENDER, "Cant create main renderer . . .");
 
 	device = this;
 	screenSurface = NULL;
 
+	//Text Manager init
 	tm.init();
 }
 
-//Delete all stuff
 gGraphicManager::~gGraphicManager(void)
 {
 	SDL_DestroyWindow(mainWnd);
-	SDL_FreeSurface(screenSurface);
 	SDL_DestroyRenderer(mainRend);
+	SDL_FreeSurface(screenSurface);
 }
 
 //Creates game window
@@ -40,7 +39,6 @@ gGraphicManager::~gGraphicManager(void)
 //Is full screen set to FALSE by default
 SDL_Window* gGraphicManager::createGameWindow(const int width, const int height, bool is_full_screen)
 {
-	cout << "SDL: creating game window . . ." << endl;
 	SDL_Window* wnd;
 
 	if(!is_full_screen)
@@ -54,12 +52,11 @@ SDL_Window* gGraphicManager::createGameWindow(const int width, const int height,
 //Creates renderer and return renderer pointer
 SDL_Renderer* gGraphicManager::createGameRenderer()
 {
-	cout << "SDL: creating game renderer . . ." << endl;
-	SDL_Renderer* rend = SDL_CreateRenderer(mainWnd, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-	return rend;
+	return SDL_CreateRenderer(mainWnd, -1, SDL_RENDERER_ACCELERATED 
+										 | SDL_RENDERER_PRESENTVSYNC);
 }
 
+//Try to receive graphicManager adress
 gGraphicManager& gGraphicManager::getGraphicManager()
 {
 	if(device)
@@ -67,6 +64,7 @@ gGraphicManager& gGraphicManager::getGraphicManager()
 	else
 		throw;
 }
+
 /************************************************
 * Main update function. Updates screen
 *
@@ -78,11 +76,9 @@ void gGraphicManager::UpdateScreen(const float td)
 	SDL_RenderClear(mainRend);
 }
 
-//Overloaded variant 1 of render function
-//Draws whole texture on the x,y point
+//Draws whole texture at the x,y coordinates
 bool gGraphicManager::RenderTexture(SDL_Texture* texture, int x, int y, float scale, Uint8 flags)
 {
-	cout << "->Render texture!" << endl;
 	 if(!texture)
 		 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Input texture is NULL!");
 
@@ -95,7 +91,7 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, int x, int y, float sc
 	 destination.w*=scale;
 	 destination.h*=scale;
 
-	 if(SDL_RenderCopy(mainRend, texture, NULL , &destination) == 0)
+	 if(SDL_RenderCopy(mainRend, texture, NULL , &destination) == -1)
 	 {
 		 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, SDL_GetError());
 		 return false;
@@ -104,11 +100,9 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, int x, int y, float sc
 	 return true;
 }
 
-//Second variant of the render function
-//Draws source rectangle of texture
+//Draws source rectangle of texture at x,y coordinates
 bool gGraphicManager::RenderTexture(SDL_Texture* texture, SDL_Rect source, int x, int y, float scale)
 {
-	cout << "->Render texture!" << endl;
 	 if(!texture)
 		 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Input texture is NULL!");
 
@@ -123,20 +117,17 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, SDL_Rect source, int x
 	 destination.h*=scale;
 
 	 //Apply flags changes
+	 //TODO:THERE ARE FLAGS 
 
-	 if(SDL_RenderCopy(mainRend, texture, &source , &destination) == 0)
-	 {
+	 if(SDL_RenderCopy(mainRend, texture, &source , &destination) == -1)
 		 return false;
-	 }
 
 	 return true;
 }
 
-//Most simply render function
 //Render whole texture on the whole screen
 bool gGraphicManager::RenderTexture(SDL_Texture* texture, Uint8 flags)
 {
-	cout << "->Render texture!" << endl;
 	 if(!texture)
 		 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Input texture is NULL!");
 
@@ -150,7 +141,7 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, Uint8 flags)
 	 if(flags == 1)
 		 SDL_SetTextureColorMod(texture, 180, 50, 50);
 
-	 if(SDL_RenderCopy(mainRend, texture, NULL , &destination) == 0)
+	 if(SDL_RenderCopy(mainRend, texture, NULL , &destination) == -1)
 	 {
 		 SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, SDL_GetError());
 		 return false;
@@ -159,12 +150,12 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, Uint8 flags)
 	 return true;
 }
 
-//Loads texture from the file. file_name - full file name.
+//Loads texture from the file.
+//@arg file_name - name of the file to load.
 //WARNING: only BMP files attempt.
-//If no such file in the directory - used default image.
+//If it is no such file in the directory - used default image.
 SDL_Texture* gGraphicManager::loadTexture(const char* file_name)
 {
-	cout << "->Loading " << file_name << " texture . . ." << endl;
 	screenSurface = SDL_LoadBMP(file_name);
 
 	if(!screenSurface)
@@ -187,16 +178,14 @@ void gGraphicManager::setWindowFullScreen()
 		return;
 	else
 	{
-	SDL_SetWindowFullscreen(mainWnd, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	SDL_SetWindowDisplayMode(mainWnd, NULL);
-	SDL_GetWindowSize(mainWnd, &screen_width, &screen_height);
-	cout << "Screen has been setup to full screen mode! "
-		 << screen_width << "x" << screen_height << endl;
+		SDL_SetWindowFullscreen(mainWnd, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		SDL_SetWindowDisplayMode(mainWnd, NULL);
+		SDL_GetWindowSize(mainWnd, &screen_width, &screen_height);
 	}
-
 	is_full_screen = true;
 }
 
+//TODO EFFECT 
 void gGraphicManager::shadeScreen()
 {
 }

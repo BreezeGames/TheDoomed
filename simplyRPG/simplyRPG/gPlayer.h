@@ -1,3 +1,11 @@
+/*	This file is part of GEngine.
+*
+*Decription:
+*
+*Author: George Popov
+*Date:
+*Current Phase: 
+*/
 #ifndef GPLAYER
 #define GPLAYER
 
@@ -14,19 +22,21 @@ public:
 
 	~gPlayer(void);
 
+	//INTERFACE methods
 	void draw();
 	void remove();
+	bool load();
+
 	void moveX(int dx) {x += speed*dx;}
 	void moveY(int dy) {y += speed*dy;}
-
-	bool load();
+	
 	bool createNewPlayer();
 private:
 	float speed;
 
 	string name;
-	const string dir;
-	SDL_Texture* texture; //Основная текстура персонажа.
+	const string dir; //Player recources dir
+	SDL_Texture* texture; //Main player texture
 };
 
 #endif
