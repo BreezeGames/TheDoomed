@@ -1,0 +1,8 @@
+Common information
+
+Project name: The hopeless.
+Version: 0.01 (28.03.2015)
+
+Current state: in project.
+Developers: George Popov popoff96@live.com
+--------------------------------------------------------------
