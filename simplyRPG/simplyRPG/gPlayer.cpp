@@ -3,10 +3,6 @@
 //Default constructor
 gPlayer::gPlayer(void) : name("adventurer"), dir("players/"), speed(5.5f)
 {
-	id = 0;
-	x = 0;
-	y = 0;
-
 	gGraphicManager &gm = gGraphicManager::getGraphicManager();
 
 	//PLAYER loading
@@ -58,13 +54,13 @@ void gPlayer::draw()
 	gGraphicManager &gm = gGraphicManager::getGraphicManager();
 
 	//Draw player
-	if(texture)
-		gm.RenderTexture(texture, x, y, 5);
+	if (texture)
+		gm.RenderTexture(texture, coords.x, coords.y, 5);
 	else
-		gm.RenderTexture(default_texture, x, y, 5);
+		gm.RenderTexture(default_texture, coords.x, coords.y, 5);
 
 	//Draw position 
-	gm.drawText(name.c_str(), x, y - 15 / 2);
+	gm.drawText(name.c_str(), coords.x, coords.y - 15 / 2);
 }
 
 

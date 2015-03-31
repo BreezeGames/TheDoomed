@@ -25,6 +25,14 @@ gGraphicManager::gGraphicManager(const int width, const int height):screen_width
 
 	//Text Manager init
 	tm.init();
+
+	//Background color
+	backgroundColor.r = 150;
+	backgroundColor.g = 150;
+	backgroundColor.b = 200;
+	backgroundColor.a = 0.7;
+	SDL_SetRenderDrawColor(mainRend, backgroundColor.r,backgroundColor.g, 
+		backgroundColor.b, backgroundColor.a);
 }
 
 gGraphicManager::~gGraphicManager(void)
@@ -88,8 +96,8 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, int x, int y, float sc
 
 	 SDL_QueryTexture(texture, NULL, NULL, &destination.w, &destination.h);
 
-	 destination.w*=scale;
-	 destination.h*=scale;
+	 destination.w*=(int)scale;
+	 destination.h*=(int)scale;
 
 	 if(SDL_RenderCopy(mainRend, texture, NULL , &destination) == -1)
 	 {
@@ -113,8 +121,8 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, SDL_Rect source, int x
 	 destination.h = source.h;
 	// SDL_QueryTexture(texture, NULL, NULL, &destination.w, &destination.h);
 
-	 destination.w*=scale;
-	 destination.h*=scale;
+	 destination.w*=(int)scale;
+	 destination.h*=(int)scale;
 
 	 //Apply flags changes
 	 //TODO:THERE ARE FLAGS 
@@ -185,7 +193,60 @@ void gGraphicManager::setWindowFullScreen()
 	is_full_screen = true;
 }
 
-//TODO EFFECT 
+//Get texture width and height
+SDL_Point gGraphicManager::getTextureSize(SDL_Texture* texture) 
+{
+	SDL_Point size;
+	SDL_QueryTexture(texture, NULL, NULL, &size.x, &size.y);
+
+	return size;
+}
+
+//Sets render draw color
+//@arg color - desired color.
+void gGraphicManager::setRenderDrawColor(SDL_Color color)
+{
+	SDL_SetRenderDrawColor(mainRend, color.r, color.g, color.b, color.a);
+}
+
+void gGraphicManager::setRenderDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+	SDL_SetRenderDrawColor(mainRend, r, g, b, a);
+}
+
+//Shades the screen
 void gGraphicManager::shadeScreen()
 {
+	//Left and right blocks(Grey) // Main Color to shade screen.(black)
+	SDL_Color add_shade_color;  SDL_Color shade_color;
+	add_shade_color.r = 100;		shade_color.r = 50;
+	add_shade_color.g = 100;		shade_color.g = 50;
+	add_shade_color.b = 100;		shade_color.b = 50;
+	add_shade_color.a = 200;		shade_color.a = 200;
+
+	setRenderDrawColor(shade_color);
+	SDL_SetRenderDrawBlendMode(mainRend, SDL_BLENDMODE_BLEND);
+
+	//Middle part of the shader
+	SDL_Rect screen;
+	screen.x = width()*0.2;
+	screen.y = 0;
+	screen.w = width() - width()*0.4;
+	screen.h = screen_height;
+	SDL_RenderFillRect(mainRend, &screen);
+
+	setRenderDrawColor(add_shade_color);
+	//Left part
+	screen.x = 0;
+	screen.w = width()*0.2;
+	SDL_RenderFillRect(mainRend, &screen);
+
+	//Right part
+	screen.x = width() - width()*0.2;
+	screen.w = width()*0.2;
+	SDL_RenderFillRect(mainRend, &screen);
+
+	setRenderDrawColor(backgroundColor);
+	SDL_SetRenderDrawBlendMode(mainRend, SDL_BLENDMODE_NONE);
 }
+

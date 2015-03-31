@@ -1,8 +1,7 @@
 #include "gGame.h"
 
 
-gGame::gGame(const int width, const int height):
-	screen_height(height), screen_width(width), dir("res/")
+gGame::gGame(const int width, const int height): dir("res/")
 {
 	state = GAME_LOGIN;//INITIAL STATE
 
@@ -51,6 +50,8 @@ void gGame::updateGameState()
 		break;
 	case GAME_PAUSE:
 		player.draw();
+		gm.shadeScreen();
+		gm.drawText("GAME PAUSED", (gm.width() - gm.width()*0.08) / 2, gm.height() / 2);
 		break;
 	case GAME_EXIT:
 		SDL_Quit();
@@ -89,7 +90,7 @@ void gGame::gLoginMenu()
 
 	gm.RenderTexture(loginMenu_background);
 	gm.drawText("Forgotted (C) 2015 all rights are reserved. Gengine - 2014-2015. All marks are reserved! "
-				"You may not distribute this product without author accept!!",100,500);
+		"You may not distribute this product without author accept!!", 100, gm.height() - 50);
 }
 
 //Get key events

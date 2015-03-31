@@ -19,6 +19,8 @@ class gGraphicManager
 {
 public:
 	static gGraphicManager& getGraphicManager(); //Return an adress of last initialized graphic manager
+	static SDL_Point getTextureSize(SDL_Texture* texture); // Return texture size in pixels
+
 	gGraphicManager(const int width = 800,const int height = 600);
 	~gGraphicManager(void);
 
@@ -31,6 +33,8 @@ public:
 
 	//SET methods
 	void setWindowFullScreen();
+	void setRenderDrawColor(SDL_Color color);
+	void setRenderDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 0);
 
 	//LOAD methods
 	SDL_Texture* loadTexture(const char* file_name);
@@ -51,6 +55,8 @@ private:
 	SDL_Window* mainWnd;
 	SDL_Surface* screenSurface;
 	SDL_Renderer* mainRend;
+
+	SDL_Color backgroundColor;
 
 	int screen_width;
 	int screen_height;

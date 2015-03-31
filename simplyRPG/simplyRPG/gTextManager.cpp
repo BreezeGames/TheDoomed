@@ -53,7 +53,7 @@ void gTextManager::drawText(const char* string, gFont font, int x, int y)
 	float size = font.getSize();
 	int tile_size = font.getTileSize();
 	
-	while (*string++)
+	while (*string)
 	{
 		posX = char_map[*string];
 		posY = char_map[*string] / 9;
@@ -69,11 +69,12 @@ void gTextManager::drawText(const char* string, gFont font, int x, int y)
 			(x + (symbol_numb*font_interval*size)) < 0 + 100)
 		{
 			symbol_numb = 0;
-			y += (int)((font_interval+0.2)*tile_size*size);//WARNING maybe y must be float...
+			y += (int)((font_interval+0.2)*tile_size*size);
 		}
 
 		gm.RenderTexture(map_texture, source, x + (int)(symbol_numb*(font_interval*tile_size*size)), y, size);
 
 		symbol_numb++;
+		*string++;
 	}
 }

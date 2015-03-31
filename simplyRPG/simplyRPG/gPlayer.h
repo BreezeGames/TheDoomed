@@ -27,8 +27,8 @@ public:
 	void remove();
 	bool load();
 
-	void moveX(int dx) {x += speed*dx;}
-	void moveY(int dy) {y += speed*dy;}
+	void moveX(int dx) {coords.x += (int)speed*dx;}
+	void moveY(int dy) {coords.y += (int)speed*dy;}
 	
 	bool createNewPlayer();
 private:

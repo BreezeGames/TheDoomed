@@ -53,9 +53,6 @@ private:
 	gGameState state;
 	gPlayer player;
 
-	int screen_width;
-	int screen_height;
-
 	SDL_Texture* loginMenu_background;
 	SDL_Texture* menu_foreground;
 	SDL_Texture* menu_background;
