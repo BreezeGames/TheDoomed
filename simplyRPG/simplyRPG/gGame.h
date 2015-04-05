@@ -9,6 +9,9 @@
 #ifndef GAME
 #define GAME
 
+#define GAME_VERSION 0.01a
+#define AUTHOR GEORGE_POPOV
+
 #include <SDL.h>
 #include <string>
 #include <iostream>
@@ -31,7 +34,7 @@ public:
 	
 	//UPDATE functions
 	void updateGameState();//Update current game state
-	void update();//Updates all classes mechanics
+	void update();//Updates all classes mechanics.
 	void updateKeyEvent();//Handle player's input
 
 	int getCurrentPlayerID();
@@ -45,6 +48,7 @@ public:
 	void gLoginMenu();
 	void gMenu();
 	void gDebug();
+	void gGamePaused();
 
 	gGraphicManager* getGraphicDevice() {return &gm;};//Return a pointer to the last initialized graphic device
 	~gGame(void);
@@ -56,6 +60,8 @@ private:
 	SDL_Texture* loginMenu_background;
 	SDL_Texture* menu_foreground;
 	SDL_Texture* menu_background;
+
+	gFont default_font; //Main game font
 
 	SDL_Event ev;
 	const string dir;//Directory for resources

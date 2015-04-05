@@ -15,6 +15,8 @@ gGame::gGame(const int width, const int height): dir("res/")
 	path = dir+"menu_foreground.bmp";
 	menu_foreground = gm.loadTexture(path.c_str());
 	//End of textures loading
+
+	//Init font
 }
 
 
@@ -50,11 +52,11 @@ void gGame::updateGameState()
 		break;
 	case GAME_PAUSE:
 		player.draw();
-		gm.shadeScreen();
-		gm.drawText("GAME PAUSED", (gm.width() - gm.width()*0.08) / 2, gm.height() / 2);
+		gGamePaused();
 		break;
 	case GAME_EXIT:
 		SDL_Quit();
+		exit(0);
 		break;
 	}
 }
@@ -178,4 +180,21 @@ void gGame::update()
 	gm.UpdateScreen();
 
 	SDL_Delay(50);//Game fps
+}
+
+//Draws pause screen
+void gGame::gGamePaused()
+{
+	SDL_Rect region;
+	region.x = 0;
+	region.y = 0;
+	region.w = gm.width();
+	region.h = gm.height();
+
+	gm.shadeScreen();
+
+	gtext::gTextLayout textLayout("On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain.These cases are perfectly simple and easy to distinguish.In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided.But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted.The wise man therefore always holds in these matters to this principle of selection : he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.",
+		region, default_font, 1, gtext::G_TEXT_ALIGN_LEFT);
+	
+	gm.renderTextLayout(textLayout);
 }

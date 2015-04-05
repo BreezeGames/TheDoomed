@@ -9,6 +9,8 @@
 #ifndef GGRAPHIC_H
 #define GGRAPHIC_H
 
+#define DEBUG true
+
 #include <SDL.h>
 #include <iostream>
 #include "gTextManager.h"
@@ -36,11 +38,15 @@ public:
 	void setRenderDrawColor(SDL_Color color);
 	void setRenderDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 0);
 
+	//DRAW methods
+	void drawLine(int x0, int y0, int x1, int y1, SDL_Color* color = nullptr);
+
 	//LOAD methods
 	SDL_Texture* loadTexture(const char* file_name);
 
 	//Text
-	void drawText(const char* text, int x = 0, int y = 0) {tm.drawText(text, mainFont, x, y);};
+	void drawText(const char* text, int x, int y, int size = 1) {tm.drawText(text, mainFont, x, y, size);};
+	void renderTextLayout(gtext::gTextLayout layout){ tm.drawText(layout); }
 
 	//Effects
 	void shadeScreen();
@@ -49,7 +55,7 @@ public:
 	int width() const {return screen_width;}
 	int height() const {return screen_height;}
 private:
-	gTextManager tm;
+	gtext::gTextManager tm;
 
 	gFont mainFont;
 	SDL_Window* mainWnd;

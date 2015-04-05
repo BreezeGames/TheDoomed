@@ -27,10 +27,10 @@ gGraphicManager::gGraphicManager(const int width, const int height):screen_width
 	tm.init();
 
 	//Background color
-	backgroundColor.r = 150;
-	backgroundColor.g = 150;
+	backgroundColor.r = 200;
+	backgroundColor.g = 200;
 	backgroundColor.b = 200;
-	backgroundColor.a = 0.7;
+	backgroundColor.a = 0;
 	SDL_SetRenderDrawColor(mainRend, backgroundColor.r,backgroundColor.g, 
 		backgroundColor.b, backgroundColor.a);
 }
@@ -158,6 +158,20 @@ bool gGraphicManager::RenderTexture(SDL_Texture* texture, Uint8 flags)
 	 return true;
 }
 
+//Draws line at the screen
+//@param x0, y0 - initial coords
+//@param x1, y1 - end coords
+void gGraphicManager::drawLine(int x0, int y0, int x1, int y1, SDL_Color* color)
+{
+	if (color != nullptr)
+		SDL_SetRenderDrawColor(mainRend, color->r, color -> g, color->b, color->a);
+
+	SDL_RenderDrawLine(mainRend, x0, y0, x1, y1);
+
+	SDL_SetRenderDrawColor(mainRend, backgroundColor.r, backgroundColor.g,
+		backgroundColor.b, backgroundColor.a);
+}
+
 //Loads texture from the file.
 //@arg file_name - name of the file to load.
 //WARNING: only BMP files attempt.
@@ -222,28 +236,28 @@ void gGraphicManager::shadeScreen()
 	add_shade_color.r = 100;		shade_color.r = 50;
 	add_shade_color.g = 100;		shade_color.g = 50;
 	add_shade_color.b = 100;		shade_color.b = 50;
-	add_shade_color.a = 200;		shade_color.a = 200;
+	add_shade_color.a = 150;		shade_color.a = 150;
 
 	setRenderDrawColor(shade_color);
 	SDL_SetRenderDrawBlendMode(mainRend, SDL_BLENDMODE_BLEND);
 
 	//Middle part of the shader
 	SDL_Rect screen;
-	screen.x = width()*0.2;
+	screen.x = (int)(width()*0.2);
 	screen.y = 0;
-	screen.w = width() - width()*0.4;
+	screen.w = (int)(width() - width()*0.4);
 	screen.h = screen_height;
 	SDL_RenderFillRect(mainRend, &screen);
 
 	setRenderDrawColor(add_shade_color);
 	//Left part
 	screen.x = 0;
-	screen.w = width()*0.2;
+	screen.w = (int)(width()*0.2);
 	SDL_RenderFillRect(mainRend, &screen);
 
 	//Right part
-	screen.x = width() - width()*0.2;
-	screen.w = width()*0.2;
+	screen.x = (int)(width() - width()*0.2);
+	screen.w = (int)(width()*0.2);
 	SDL_RenderFillRect(mainRend, &screen);
 
 	setRenderDrawColor(backgroundColor);
